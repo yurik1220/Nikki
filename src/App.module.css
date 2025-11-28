@@ -1,0 +1,82 @@
+.appShell {
+  min-height: 100vh;
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.2rem, 5vw, 4.5rem) 4.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  position: relative;
+  border-radius: 42px;
+  backdrop-filter: blur(25px);
+  background: rgba(12, 12, 16, 0.85);
+  box-shadow: 0 35px 75px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.appShell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 42px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  mix-blend-mode: screen;
+}
+
+.contentLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 3rem;
+  align-items: start;
+}
+
+.mainSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-bottom: 1.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sectionLabel {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.7rem;
+  color: #bca37a;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin: 0;
+  color: #fef9f0;
+}
+
+.sidebar {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .appShell {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    background: transparent;
+    padding-top: 1.5rem;
+  }
+
+  .contentLayout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

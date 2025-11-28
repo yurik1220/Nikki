@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap');
+
+.shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, rgba(66, 52, 38, 0.35), transparent 55%),
+    linear-gradient(160deg, #050505 0%, #111217 60%, #1c1c24 100%);
+}
+
+.card {
+  width: min(420px, 90%);
+  background: linear-gradient(145deg, rgba(18, 18, 22, 0.95), rgba(28, 28, 36, 0.95));
+  border-radius: 28px;
+  padding: 2.5rem;
+  box-shadow: 0 45px 80px rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #f5ede1;
+}
+
+.card h1 {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.card p {
+  margin: 0;
+  color: #bfb3a1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+input {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 15, 0.65);
+  color: #f5ede1;
+  padding: 0.75rem 0.85rem;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+button {
+  border-radius: 14px;
+  border: none;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(120deg, #eab04c, #bd7d2c);
+  color: #0d0906;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ff8a8a;
+  font-size: 0.85rem;
+}
+

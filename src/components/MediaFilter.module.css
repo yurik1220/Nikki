@@ -1,0 +1,47 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.card {
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(140deg, rgba(24, 24, 30, 0.95), rgba(18, 18, 24, 0.95));
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.5);
+  color: #dcd1c1;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.65);
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  color: #bca37a;
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #a19280;
+}
+
+.active {
+  border-color: rgba(229, 183, 103, 0.8);
+  background: linear-gradient(140deg, #2a2118, #1f1913);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 30px 50px rgba(0, 0, 0, 0.7);
+}
+
