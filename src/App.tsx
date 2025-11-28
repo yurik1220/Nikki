@@ -47,6 +47,8 @@ type AuthState = {
 
 const STORAGE_KEY = 'nikki_auth'
 
+const apiBase = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
+
 function App() {
   const [items, setItems] = useState<ContentItem[]>([])
   const [filter, setFilter] = useState<MediaFilterKey>('all')
@@ -75,7 +77,7 @@ function App() {
 
     const load = async () => {
       try {
-        const response = await fetch('/api/fragments', { signal: controller.signal })
+        const response = await fetch(`${apiBase}/api/fragments`, { signal: controller.signal })
         if (!response.ok) {
           throw new Error('Request failed')
         }
@@ -143,7 +145,7 @@ function App() {
           reader.readAsDataURL(file)
         })
 
-        const response = await fetch('/api/fragments', {
+        const response = await fetch(`${apiBase}/api/fragments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
