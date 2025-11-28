@@ -1,0 +1,98 @@
+.panel {
+  margin-top: 0.5rem;
+  padding: 1rem 1.2rem;
+  border-radius: 20px;
+  background: rgba(8, 8, 12, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.55);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  gap: 0.8rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  color: #fef9f0;
+}
+
+.caption {
+  font-size: 0.78rem;
+  color: #948b7c;
+}
+
+.closeButton {
+  border: none;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fef9f0;
+  cursor: pointer;
+}
+
+.status {
+  font-size: 0.9rem;
+  color: #b1a89c;
+}
+
+.error {
+  color: #ff7d7d;
+  font-size: 0.9rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.username {
+  margin: 0;
+  font-weight: 600;
+  color: #f6ede1;
+}
+
+.coords {
+  margin: 0.15rem 0 0.2rem;
+  color: #d5cbbd;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.timestamp {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #8f8577;
+}
+
+.mapButton {
+  align-self: center;
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  background: linear-gradient(120deg, #b7832f, #d9a650);
+  color: #0e0c0b;
+  text-decoration: none;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+

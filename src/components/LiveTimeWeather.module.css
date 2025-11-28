@@ -1,0 +1,56 @@
+.liveShell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(16, 16, 22, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+}
+
+.label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #8a8377;
+}
+
+.value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff4e2;
+  white-space: nowrap;
+}
+
+.divider {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.25), transparent);
+}
+
+@media (max-width: 640px) {
+  .liveShell {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.65rem 0.9rem;
+  }
+
+  .block {
+    min-width: unset;
+    align-items: center;
+  }
+
+  .divider {
+    display: none;
+  }
+}
+

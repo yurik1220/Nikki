@@ -83,6 +83,16 @@ const ensureSetup = async () => {
     )
   `)
 
+  await pool.query(`
+    create table if not exists locations (
+      id uuid primary key,
+      user_id uuid references accounts(id) on delete cascade,
+      latitude double precision not null,
+      longitude double precision not null,
+      created_at timestamptz default now()
+    )
+  `)
+
   const ensureAccount = async (username, password, role) => {
     const existing = await pool.query('select id from accounts where username = $1', [username])
     if (existing.rowCount === 0) {
@@ -183,6 +193,54 @@ app.post('/api/fragments', authenticate, requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('[server] Failed to create fragment', error)
     res.status(500).json({ message: 'Failed to create fragment' })
+  }
+})
+
+app.post('/api/locations', authenticate, async (req, res) => {
+  const { latitude, longitude } = req.body ?? {}
+
+  if (typeof latitude !== 'number' || typeof longitude !== 'number') {
+    return res.status(400).json({ message: 'latitude and longitude are required' })
+  }
+
+  const id = randomUUID()
+  const userId = req.user?.sub ?? null
+
+  if (!userId) {
+    return res.status(400).json({ message: 'Invalid user context' })
+  }
+
+  try {
+    await pool.query(
+      'insert into locations (id, user_id, latitude, longitude) values ($1, $2, $3, $4)',
+      [id, userId, latitude, longitude],
+    )
+    res.status(201).json({ id })
+  } catch (error) {
+    console.error('[server] Failed to record location', error)
+    res.status(500).json({ message: 'Failed to save location' })
+  }
+})
+
+app.get('/api/locations', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      select l.id,
+             l.latitude,
+             l.longitude,
+             l.created_at,
+             coalesce(a.username, 'unknown') as username
+      from locations l
+      left join accounts a on a.id = l.user_id
+      order by l.created_at desc
+      limit 200
+    `,
+    )
+    res.json(rows)
+  } catch (error) {
+    console.error('[server] Failed to fetch locations', error)
+    res.status(500).json({ message: 'Failed to fetch locations' })
   }
 })
 

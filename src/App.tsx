@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Header from './components/Header.tsx'
+import LiveTimeWeather from './components/LiveTimeWeather.tsx'
+import LocationsPeek, { type LocationEntry } from './components/LocationsPeek.tsx'
 import NikkiGrid from './components/NikkiGrid.tsx'
 import StatsSidebar from './components/StatsSidebar.tsx'
 import MediaFilter, { type MediaFilterKey } from './components/MediaFilter.tsx'
@@ -56,6 +58,11 @@ function App() {
   const [isUploadOpen, setIsUploadOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const [locations, setLocations] = useState<LocationEntry[]>([])
+  const [isLocationsVisible, setIsLocationsVisible] = useState(false)
+  const [isLocationsLoading, setIsLocationsLoading] = useState(false)
+  const [locationsError, setLocationsError] = useState<string | null>(null)
+  const holdTimerRef = useRef<number | null>(null)
   const [auth, setAuth] = useState<AuthState | null>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -188,7 +195,79 @@ function App() {
     setAuth(null)
     localStorage.removeItem(STORAGE_KEY)
     setItems([])
+    setIsLocationsVisible(false)
+    setLocations([])
   }
+
+  const handleSecretHoldStart = () => {
+    if (!auth || auth.role !== 'admin') return
+    if (holdTimerRef.current) window.clearTimeout(holdTimerRef.current)
+    holdTimerRef.current = window.setTimeout(() => {
+      setIsLocationsVisible(true)
+    }, 900)
+  }
+
+  const handleSecretHoldEnd = () => {
+    if (holdTimerRef.current) {
+      window.clearTimeout(holdTimerRef.current)
+      holdTimerRef.current = null
+    }
+  }
+
+  useEffect(() => {
+    if (!auth || auth.role !== 'admin') {
+      setIsLocationsVisible(false)
+      return
+    }
+
+    if (!isLocationsVisible) {
+      return
+    }
+
+    if (!apiBase) {
+      setLocationsError('API base is not configured')
+      return
+    }
+
+    let ignore = false
+    const controller = new AbortController()
+
+    const load = async () => {
+      setIsLocationsLoading(true)
+      setLocationsError(null)
+      try {
+        const response = await fetch(`${apiBase}/api/locations`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+          signal: controller.signal,
+        })
+        if (!response.ok) {
+          const message = await response.text()
+          throw new Error(message || 'Failed to fetch locations')
+        }
+        const data = (await response.json()) as LocationEntry[]
+        if (!ignore) {
+          setLocations(data)
+        }
+      } catch (error) {
+        if (!ignore) {
+          setLocationsError(error instanceof Error ? error.message : 'Failed to fetch locations')
+        }
+      } finally {
+        if (!ignore) {
+          setIsLocationsLoading(false)
+        }
+      }
+    }
+
+    load()
+
+    return () => {
+      ignore = true
+      controller.abort()
+    }
+  }, [isLocationsVisible, auth, apiBase])
 
   if (!auth) {
     return <LoginView onSuccess={handleAuthSuccess} />
@@ -199,8 +278,28 @@ function App() {
       <div className={styles.contentLayout}>
         <main className={styles.mainSection}>
           <div className={styles.sectionHeader}>
-            <p className={styles.sectionLabel}>Archive</p>
-            <h2>Nikki's Kalat</h2>
+            <p
+              className={styles.sectionLabel}
+              role={auth.role === 'admin' ? 'button' : undefined}
+              tabIndex={auth.role === 'admin' ? 0 : -1}
+              onPointerDown={handleSecretHoldStart}
+              onPointerUp={handleSecretHoldEnd}
+              onPointerLeave={handleSecretHoldEnd}
+            >
+              Archive
+            </p>
+            <div className={styles.titleRow}>
+              <h2>Nikki&apos;s Kalat</h2>
+              <LiveTimeWeather apiBase={apiBase} token={auth.token} />
+            </div>
+            {isLocationsVisible && auth.role === 'admin' && (
+              <LocationsPeek
+                locations={locations}
+                isLoading={isLocationsLoading}
+                error={locationsError}
+                onClose={() => setIsLocationsVisible(false)}
+              />
+            )}
           </div>
           <MediaFilter active={filter} onChange={setFilter} />
           <NikkiGrid items={filteredItems} emptyMessage={isLoading ? 'Loading data...' : undefined} />
